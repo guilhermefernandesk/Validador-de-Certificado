@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validador de Certificado</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f2f5;
+      }
+      .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+      }
+      h1 {
+        color: #333;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 1rem 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #result {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-radius: 4px;
+        display: none; /* Começa escondido */
+      }
+      #result.valid {
+        background-color: #e9f7ef;
+        color: #146c43;
+        border: 1px solid #a3cfbb;
+      }
+      #result.invalid {
+        background-color: #f8d7da;
+        color: #842029;
+        border: 1px solid #f5c2c7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Validar Certificado</h1>
+      <form id="validationForm">
+        <input type="text" id="certificateCode" placeholder="Cole o código de autenticidade aqui" required />
+        <button type="submit">Verificar</button>
+      </form>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      document.getElementById("validationForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const code = document.getElementById("certificateCode").value;
+        const resultDiv = document.getElementById("result");
+
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbyOTL0ND2g3-U0Ed-VikVx5HGPyEk4LmDI8HAiOg2vKEes9WRxcLen7Rh0xNeduFfwyhQ/exec";
+
+        // A URL final para a API pública, passando o código como um parâmetro de busca.
+        const apiUrl = `${webAppUrl}?id=${code}`;
+        try {
+          const response = await fetch(apiUrl, {
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+          });
+
+          const data = await response.json();
+
+          resultDiv.style.display = "block";
+          if (data.valid) {
+            resultDiv.className = "valid";
+            resultDiv.innerHTML = `<strong>Certificado Válido!</strong><br><br>
+                                   <b>Emitido para:</b> ${data.certificate.nome}<br>
+                                   <b>Evento:</b> ${data.certificate.curso}<br>
+                                   <b>Emitido em:</b> ${data.certificate.emitido_em.toLocaleDateString("pt-BR")}`;
+          } else {
+            resultDiv.className = "invalid";
+            resultDiv.textContent = "Certificado inválido ou não encontrado.";
+          }
+        } catch (error) {
+          resultDiv.style.display = "block";
+          resultDiv.className = "invalid";
+          resultDiv.textContent = "Erro ao conectar com o servidor. Tente novamente.";
+          console.error("Fetch error:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
