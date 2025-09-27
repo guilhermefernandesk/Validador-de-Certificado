@@ -97,10 +97,10 @@
           resultDiv.style.display = "block";
           if (data.valid) {
             resultDiv.className = "valid";
-            resultDiv.innerHTML = `<strong>Certificado Válido!</strong><br><br>
+            resultDiv.innerHTML = `<strong>Certificado Válido!</strong></br>
                                    <b>Emitido para:</b> ${data.certificate.nome}<br>
                                    <b>Evento:</b> ${data.certificate.curso}<br>
-                                   <b>Emitido em:</b> ${data.certificate.emitido_em.toLocaleDateString("pt-BR")}`;
+                                   <b>Emitido em:</b> ${new Date(data.certificate.emitido_em).toLocaleDateString("pt-BR")}`;
           } else {
             resultDiv.className = "invalid";
             resultDiv.textContent = "Certificado inválido ou não encontrado.";
@@ -109,7 +109,7 @@
           resultDiv.style.display = "block";
           resultDiv.className = "invalid";
           resultDiv.textContent = "Erro ao conectar com o servidor. Tente novamente.";
-          console.error("Fetch error:", error);
+          console.error("Erro ao conectar com o servidor:", error);
         }
       });
     </script>
