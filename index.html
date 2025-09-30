@@ -70,7 +70,7 @@
       <h1>Validar Certificado</h1>
       <form id="validationForm">
         <input type="text" id="certificateCode" placeholder="Cole o código de autenticidade aqui" required />
-        <button type="submit">Verificar</button>
+        <button id="button" type="submit">Verificar</button>
       </form>
       <div id="result"></div>
     </div>
@@ -78,6 +78,12 @@
     <script>
       document.getElementById("validationForm").addEventListener("submit", async (e) => {
         e.preventDefault();
+        const button = document.getElementById("button");
+        button.disabled = true;
+        button.textContent = "Processando...";
+        button.style.cursor = "not-allowed";
+        button.style.backgroundColor = "#ccc";
+
         const code = document.getElementById("certificateCode").value;
         const resultDiv = document.getElementById("result");
 
@@ -110,6 +116,11 @@
           resultDiv.className = "invalid";
           resultDiv.textContent = "Erro ao conectar com o servidor. Tente novamente.";
           console.error("Erro ao conectar com o servidor:", error);
+        } finally {
+          button.disabled = false;
+          button.textContent = "Verificar";
+          button.style.cursor = "pointer";
+          button.style.backgroundColor = "#007bff";
         }
       });
     </script>
