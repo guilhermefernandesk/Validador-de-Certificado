@@ -11,15 +11,14 @@ O backend para este validador é um Google Apps Script que lê dados de uma Goog
 Primeiro, você precisará de uma planilha Google onde seus dados de certificado serão armazenados.
 
 1.  Vá para [Google Sheets](https://docs.google.com/spreadsheets/u/0/) e crie uma nova planilha.
-2.  Renomeie a primeira aba (sheet) para `Certificados`.
-3.  Na primeira linha (cabeçalho), adicione as seguintes colunas (exatamente como escrito):
+2.  Na primeira linha (cabeçalho), adicione as seguintes colunas (exatamente como escrito):
     - `ID` (para o código de autenticidade do certificado)
     - `Nome` (nome do titular do certificado)
     - `Curso` (nome do evento ou curso)
     - `Emitido Em` (data de emissão do certificado)
-4.  Preencha algumas linhas com dados de exemplo.
+3.  Preencha algumas linhas com dados de exemplo.
 
-    **Exemplo de Planilha `Certificados`:**
+    **Exemplo de Planilha `Banco de Dados de Validação`:**
 
     | ID       | Nome           | Curso                      | Emitido Em |
     | :------- | :------------- | :------------------------- | :--------- |
@@ -27,19 +26,13 @@ Primeiro, você precisará de uma planilha Google onde seus dados de certificado
     | DEF67890 | Maria Oliveira | Desenvolvimento Web Básico | 2023-03-20 |
     | GHI11223 | Pedro Souza    | Banco de Dados SQL         | 2023-05-10 |
 
-5.  **Obtenha o ID da sua Google Sheet:** O ID da planilha é uma longa sequência de caracteres na URL da sua planilha, entre `/d/` e `/edit`.
-    Ex: `https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID_HERE/edit#gid=0`
-    Anote este ID, você precisará dele no próximo passo.
+4.  Clique em Extensões > Apps Scripts
 
-### 2. Crie um Projeto Google Apps Script
+### 2. Em Google Apps Script
 
-1.  Vá para Google Apps Script.
-2.  Clique em `Novo projeto`.
-3.  Renomeie o projeto para algo como `ValidadorDeCertificadoBackend`.
+1.  Renomeie o projeto para algo como `Validador de Certificado`.
 
-### 3. Implemente o Código do Script
-
-No editor de código do Google Apps Script (o arquivo `Code.gs`), substitua o conteúdo existente pelo código abaixo:
+2.  No editor de código do Google Apps Script (o arquivo `Code.gs`), substitua o conteúdo existente pelo código abaixo:
 
 ```javascript
 // Função auxiliar para formatar a resposta como JSON.
@@ -89,8 +82,6 @@ function doGet(e) {
 }
 ```
 
-**Lembre-se de substituir `YOUR_SPREADSHEET_ID_HERE` pelo ID da sua Google Sheet!**
-
 ### 4. Implante o Script como um Aplicativo Web
 
 1.  No editor do Apps Script, clique em `Implantar` (Deploy) no canto superior direito e selecione `Nova implantação` (New deployment).
@@ -107,12 +98,9 @@ function doGet(e) {
 
 Agora que você tem a URL do seu Google Apps Script implantado, você precisa atualizar o arquivo `index.html` do seu projeto frontend.
 
-1.  Abra o arquivo `c:\Users\guilh\Documents\programacao\Validador-de-Certificado\index.html`.
-2.  Localize a linha que define `webAppUrl`:
-    ```javascript
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbyOTL0ND2g3-U0Ed-VikVx5HGPyEk4LmDI8HAiOg2vKEes9WRxcLen7Rh0xNeduFfwyhQ/exec";
-    ```
-3.  Substitua a URL existente pela `URL do aplicativo da Web` que você copiou no passo anterior.
+1.  Abra o arquivo
+
+2.  Substitua a URL existente pela `URL do aplicativo da Web` que você copiou no passo anterior.
 
     Exemplo:
 
@@ -121,16 +109,3 @@ Agora que você tem a URL do seu Google Apps Script implantado, você precisa at
     ```
 
 Agora, seu validador de certificado está configurado e pronto para uso! Abra o `index.html` no seu navegador e teste com os IDs de certificado da sua Google Sheet.
-
-## Desenvolvimento Local
-
-Para desenvolver e testar o frontend localmente, basta abrir o arquivo `index.html` diretamente no seu navegador. Ele fará as chamadas para o Google Apps Script implantado.
-
-## Estrutura do Projeto
-
-- `index.html`: Contém a interface do usuário (HTML, CSS e JavaScript) para o validador.
-- `README.md`: Este arquivo, com instruções de configuração.
-
-## Contribuições
-
-Sinta-se à vontade para contribuir com melhorias ou correções.
