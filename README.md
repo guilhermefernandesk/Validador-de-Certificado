@@ -34,55 +34,7 @@ Primeiro, você precisará de uma planilha Google onde seus dados de certificado
 
 2.  No editor de código do Google Apps Script (o arquivo `Code.gs`), substitua o conteúdo existente pelo código abaixo:
 
-```javascript
-// Função auxiliar para formatar a resposta como JSON.
-function createJsonResponse(data) {
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
-}
-
-function doGet(e) {
-  try {
-    const certificateId = e.parameter.id;
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0]; // pega primeira aba
-    const data = sheet.getDataRange().getValues() || [];
-
-    // Remove a linha do cabeçalho (linha 0) para não incluí-la na busca.
-    const records = data.slice(1);
-
-    // Procura pela linha onde a primeira coluna (índice 0) corresponde ao ID do certificado.
-    const foundRow = records.find((row) => row[0] === certificateId);
-
-    // Se a linha for encontrada...
-    if (foundRow) {
-      // Monta o objeto de resposta com os dados do certificado.
-      const certificateData = {
-        status: "válido",
-        nome: foundRow[1], // Coluna B: Nome do Aluno
-        curso: foundRow[2], // Coluna C: Nome do Evento
-        emitido_em: foundRow[3], // Coluna D: Emitido em
-      };
-
-      return createJsonResponse({
-        valid: true,
-        certificate: certificateData,
-      });
-    } else {
-      // Se não encontrar, retorna que o certificado é inválido.
-      return createJsonResponse({
-        valid: false,
-        message: "Certificado inválido ou não encontrado.",
-      });
-    }
-  } catch (error) {
-    return createJsonResponse({
-      valid: false,
-      message: `Ocorreu um erro interno no servidor de validação. ${error}`,
-    });
-  }
-}
-```
-
-### 4. Implante o Script como um Aplicativo Web
+### 3. Implante o Script como um Aplicativo Web
 
 1.  No editor do Apps Script, clique em `Implantar` (Deploy) no canto superior direito e selecione `Nova implantação` (New deployment).
 2.  Clique no ícone de engrenagem (`⚙️`) ao lado de "Selecionar tipo" e escolha `Aplicativo da Web` (Web app).
@@ -94,7 +46,7 @@ function doGet(e) {
 5.  Você será solicitado a autorizar o script a acessar seus dados do Google Sheets. Siga as instruções para conceder as permissões necessárias.
 6.  Após a implantação bem-sucedida, você receberá uma `URL do aplicativo da Web` (Web app URL). Copie esta URL.
 
-### 5. Atualize o `index.html` com a URL do seu Aplicativo Web
+### 4. Atualize o `index.html` com a URL do seu Aplicativo Web
 
 Agora que você tem a URL do seu Google Apps Script implantado, você precisa atualizar o arquivo `index.html` do seu projeto frontend.
 
