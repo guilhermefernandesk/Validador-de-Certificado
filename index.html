@@ -90,17 +90,20 @@
         const webAppUrl = "https://script.google.com/macros/s/AKfycbxH3DvQVC1oXuGWG56ESMdJG5CfjFGi-HHFyvZofyQg0l23xXre6GcFIeE_qx0gI4-f/exec";
 
         // A URL final para a API pública, passando o código como um parâmetro de busca.
-        const apiUrl = `${webAppUrl}?id=${code}`;
+        const apiUrl = `${webAppUrl}`;
         try {
           const response = await fetch(apiUrl, {
-            method: "GET",
-            // mode: "no-cors",
+            method: "POST",
+            redirect: "follow",
+            body: JSON.stringify(code),
             headers: {
               "Content-Type": "text/plain;charset=utf-8",
             },
           });
 
           const data = await response.json();
+
+          console.log(data.certificate.status);
 
           resultDiv.style.display = "block";
           if (data.valid) {
