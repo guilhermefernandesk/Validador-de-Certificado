@@ -87,12 +87,14 @@
         const code = document.getElementById("certificateCode").value;
         const resultDiv = document.getElementById("result");
 
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbyOTL0ND2g3-U0Ed-VikVx5HGPyEk4LmDI8HAiOg2vKEes9WRxcLen7Rh0xNeduFfwyhQ/exec";
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxH3DvQVC1oXuGWG56ESMdJG5CfjFGi-HHFyvZofyQg0l23xXre6GcFIeE_qx0gI4-f/exec";
 
         // A URL final para a API pública, passando o código como um parâmetro de busca.
         const apiUrl = `${webAppUrl}?id=${code}`;
         try {
           const response = await fetch(apiUrl, {
+            method: "GET",
+            // mode: "no-cors",
             headers: {
               "Content-Type": "text/plain;charset=utf-8",
             },
@@ -114,8 +116,8 @@
         } catch (error) {
           resultDiv.style.display = "block";
           resultDiv.className = "invalid";
-          resultDiv.textContent = "Erro ao conectar com o servidor. Tente novamente.";
-          console.error("Erro ao conectar com o servidor:", error);
+          resultDiv.textContent = "Erro na API. Tente novamente.";
+          console.error("Erro na API. Tente novamente.", error);
         } finally {
           button.disabled = false;
           button.textContent = "Verificar";
